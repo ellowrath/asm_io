@@ -80,4 +80,8 @@ parse_int:
 
 
 string_copy:
+    ; arguments come in through rdi, rsi, rdx
+    ; before continuing, review callee and caller saved registers
+    ; also memorize default argument registers for functions and syscalls
+
     ret

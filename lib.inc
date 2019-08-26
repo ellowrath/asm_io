@@ -11,9 +11,29 @@ string_length:
     .end:
         ret
 
+
 print_string:
     xor rax, rax
-    ret
+
+    .loop:
+        cmp byte [rdi + rax], 0
+        je .end
+        push rax
+        push rdi
+        push rcx
+        lea rsi, [rdi + rax]
+        mov rax, 1
+        mov rdi, 1
+        mov rdx, 1
+        syscall
+        pop rcx
+        pop rdi
+        pop rax
+        inc rax
+        jmp .loop
+    
+    .end:
+        ret
 
 
 print_char:

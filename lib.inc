@@ -80,38 +80,31 @@ parse_int:
 
 
 string_copy:
-    ; arguments come in through rdi, rsi, rdx
-    ; before continuing, review callee and caller saved registers
-    ; also memorize default argument registers for functions and syscalls
-
-    ; call string_length
-    ; compare value to buffer length (rdx)
-    ; if buffer length is shorter than string length, return zero
-    ; (should I pad zeros if string is shorter?)
-    ; loop to move characters into buffer
-    xor rax, rax
-
     push rdi
-    call string_length
-    cmp rdx, rdi
-    jl .short_buffer
-    mov rcx, 0
-    pop rdi
     push rsi
-    je .loop
+    push rdx
+    call string_length
+    pop rdx
+    pop rsi
+    pop rdi
+
+    cmp rax, rdx
+    jae .short_buffer
+
+    push rsi
+
+    .loop:
+        mov dl, byte[rdi]
+        mov byte[rsi], dl
+        inc rdi
+        inc rsi
+        test dl, dl
+        jnz .loop
+
+    pop rax
+    ret
 
     .short_buffer:
-        mov rax, 0
+        xor rax, rax
         ret
-
-     .loop:
-        mov rsi, [rdi + rcx]
-        cmp rcx, rdx
-        inc rcx
-        inc rsi
-        jl .loop
-
-    pop rsi
-    mov rax, rsi
-    ret
     

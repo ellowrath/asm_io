@@ -84,4 +84,34 @@ string_copy:
     ; before continuing, review callee and caller saved registers
     ; also memorize default argument registers for functions and syscalls
 
+    ; call string_length
+    ; compare value to buffer length (rdx)
+    ; if buffer length is shorter than string length, return zero
+    ; (should I pad zeros if string is shorter?)
+    ; loop to move characters into buffer
+    xor rax, rax
+
+    push rdi
+    call string_length
+    cmp rdx, rdi
+    jl .short_buffer
+    mov rcx, 0
+    pop rdi
+    push rsi
+    je .loop
+
+    .short_buffer:
+        mov rax, 0
+        ret
+
+     .loop:
+        mov rsi, [rdi + rcx]
+        cmp rcx, rdx
+        inc rcx
+        inc rsi
+        jl .loop
+
+    pop rsi
+    mov rax, rsi
     ret
+    

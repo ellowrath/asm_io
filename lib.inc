@@ -31,13 +31,16 @@ print_string:
         pop rax
         inc rax
         jmp .loop
-    
+
     .end:
         ret
 
 
 print_char:
-    xor rax, rax
+    push rdi
+    mov rdi, rsp
+    call print_string
+    pop rdi
     ret
 
 print_newline:

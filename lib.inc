@@ -13,31 +13,22 @@ string_length:
 
 
 print_string:
-    xor rax, rax
 
-    .loop:
-        cmp byte [rdi + rax], 0
-        je .end
-        push rax
-        push rdi
-        push rcx
-        lea rsi, [rdi + rax]
-        mov rax, 1
-        mov rdi, 1
-        mov rdx, 1
-        syscall
-        pop rcx
-        pop rdi
-        pop rax
-        inc rax
-        jmp .loop
-    
-    .end:
-        ret
+    push rdi
+    call string_length
+    pop rsi
+    mov rdx, rax
+    mov rax, 1
+    mov rdi, 1
+    syscall
+    ret
 
 
 print_char:
-    xor rax, rax
+    push rdi
+    mov rdi, rsp
+    call print_string
+    pop rdi
     ret
 
 print_newline:

@@ -11,3 +11,4 @@ read_char
 parse_uint
 parse_int
 string_copy
+__pycache__/
